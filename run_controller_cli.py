@@ -70,7 +70,7 @@ async def gamepad_proxy(controller_state: ControllerState):
 
     gamepad_loop = True
     while gamepad_loop:
-        clock.tick(60)
+        # clock.tick(60)
 
         for event in pygame.event.get():
 
@@ -78,12 +78,16 @@ async def gamepad_proxy(controller_state: ControllerState):
             if event.type == pygame.JOYAXISMOTION:
                 if event.axis == 0:
                     print("L Horizontal", event.value)
+                    controller_state.l_stick_state.set_h(event.value)
                 if event.axis == 1:
                     print("L Vertical", event.value)
+                    controller_state.l_stick_state.set_v(event.value)
                 if event.axis == 2:
                     print("R Horizontal", event.value)
+                    controller_state.r_stick_state.set_h(event.value)
                 if event.axis == 3:
                     print("R Vertical", event.value)
+                    controller_state.r_stick_state.set_v(event.value)
 
             # Buttons
             if event.type == pygame.JOYBUTTONDOWN:

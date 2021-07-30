@@ -57,6 +57,8 @@ Options:
                                             connection.
 """
 
+def rescale(val):
+    return (int)((val+1) * 2048)
 
 async def gamepad_proxy(controller_state: ControllerState):
     pygame.init()
@@ -78,16 +80,16 @@ async def gamepad_proxy(controller_state: ControllerState):
             if event.type == pygame.JOYAXISMOTION:
                 if event.axis == 0:
                     print("L Horizontal", event.value)
-                    controller_state.l_stick_state.set_h(event.value)
+                    controller_state.l_stick_state.set_h(rescale(event.value))
                 if event.axis == 1:
                     print("L Vertical", event.value)
-                    controller_state.l_stick_state.set_v(event.value)
+                    controller_state.l_stick_state.set_v(rescale(event.value))
                 if event.axis == 2:
                     print("R Horizontal", event.value)
-                    controller_state.r_stick_state.set_h(event.value)
+                    controller_state.r_stick_state.set_h(rescale(event.value))
                 if event.axis == 3:
                     print("R Vertical", event.value)
-                    controller_state.r_stick_state.set_v(event.value)
+                    controller_state.r_stick_state.set_v(rescale(event.value))
 
             # Buttons
             if event.type == pygame.JOYBUTTONDOWN:

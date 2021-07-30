@@ -89,90 +89,90 @@ async def gamepad_proxy(controller_state: ControllerState):
             if event.type == pygame.JOYBUTTONDOWN:
                 if event.button == 0:
                     print("Y Down")
-                    button_press(controller_state, "y")
+                    await button_press(controller_state, "y")
                 if event.button == 1:
                     print("B Down")
-                    button_press(controller_state, "b")
+                    await button_press(controller_state, "b")
                 if event.button == 2:
                     print("A Down")
-                    button_press(controller_state, "a")
+                    await button_press(controller_state, "a")
                 if event.button == 3:
                     print("X Down")
-                    button_press(controller_state, "x")
+                    await button_press(controller_state, "x")
                 if event.button == 4:
                     print("LB Down")
-                    button_press(controller_state, "l")
+                    await button_press(controller_state, "l")
                 if event.button == 5:
                     print("RB Down")
-                    button_press(controller_state, "r")
+                    await button_press(controller_state, "r")
                 if event.button == 6:
                     print("LT Down")
-                    button_press(controller_state, "zl")
+                    await button_press(controller_state, "zl")
                 if event.button == 7:
                     print("RT Down")
-                    button_press(controller_state, "zr")
+                    await button_press(controller_state, "zr")
                 if event.button == 8:
                     print("- Down")
-                    button_press(controller_state, "minus")
+                    await button_press(controller_state, "minus")
                 if event.button == 9:
                     print("+ Down")
-                    button_press(controller_state, "plus")
+                    await button_press(controller_state, "plus")
                 if event.button == 10:
                     print("L Stick Down")
-                    button_press(controller_state, "l_stick")
+                    await button_press(controller_state, "l_stick")
                 if event.button == 11:
                     print("R Stick Down")
-                    button_press(controller_state, "r_stick")
+                    await button_press(controller_state, "r_stick")
                 if event.button == 12:
                     print("Home Down")
-                    button_press(controller_state, "home")
+                    await button_press(controller_state, "home")
                 if event.button == 13:
                     print("Capture Down")
-                    button_press(controller_state, "capture")
+                    await button_press(controller_state, "capture")
                 
             if event.type == pygame.JOYBUTTONUP:
                 if event.button == 0:
                     print("Y Down")
-                    button_release(controller_state, "y")
+                    await button_release(controller_state, "y")
                 if event.button == 1:
                     print("B Down")
-                    button_release(controller_state, "b")
+                    await button_release(controller_state, "b")
                 if event.button == 2:
                     print("A Down")
-                    button_release(controller_state, "a")
+                    await button_release(controller_state, "a")
                 if event.button == 3:
                     print("X Down")
-                    button_release(controller_state, "x")
+                    await button_release(controller_state, "x")
                 if event.button == 4:
                     print("LB Down")
-                    button_release(controller_state, "l")
+                    await button_release(controller_state, "l")
                 if event.button == 5:
                     print("RB Down")
-                    button_release(controller_state, "r")
+                    await button_release(controller_state, "r")
                 if event.button == 6:
                     print("LT Down")
-                    button_release(controller_state, "zl")
+                    await button_release(controller_state, "zl")
                 if event.button == 7:
                     print("RT Down")
-                    button_release(controller_state, "zr")
+                    await button_release(controller_state, "zr")
                 if event.button == 8:
                     print("- Down")
-                    button_release(controller_state, "minus")
+                    await button_release(controller_state, "minus")
                 if event.button == 9:
                     print("+ Down")
-                    button_release(controller_state, "plus")
+                    await button_release(controller_state, "plus")
                 if event.button == 10:
                     print("L Stick Down")
-                    button_release(controller_state, "l_stick")
+                    await button_release(controller_state, "l_stick")
                 if event.button == 11:
                     print("R Stick Down")
-                    button_release(controller_state, "r_stick")
+                    await button_release(controller_state, "r_stick")
                 if event.button == 12:
                     print("Home Down")
-                    button_release(controller_state, "home")
+                    await button_release(controller_state, "home")
                 if event.button == 13:
                     print("Capture Down")
-                    button_release(controller_state, "capture")
+                    await button_release(controller_state, "capture")
 
 def _register_commands_with_controller_state(controller_state, cli):
     """

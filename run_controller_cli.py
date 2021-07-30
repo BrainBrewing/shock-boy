@@ -17,6 +17,8 @@ from joycontrol.protocol import controller_protocol_factory
 from joycontrol.server import create_hid_server
 from joycontrol.nfc_tag import NFCTag
 
+import pygame
+
 logger = logging.getLogger(__name__)
 
 """Emulates Switch controller. Opens joycontrol.command_line_interface to send button commands and more.
@@ -70,107 +72,107 @@ async def gamepad_proxy(controller_state: ControllerState):
     while gamepad_loop:
         clock.tick(60)
 
-    for event in pygame.event.get():
+        for event in pygame.event.get():
 
-        # Sticks
-        if event.type == pygame.JOYAXISMOTION:
-            if event.axis == 0:
-                print("L Horizontal", event.value)
-            if event.axis == 1:
-                print("L Vertical", event.value)
-            if event.axis == 2:
-                print("R Horizontal", event.value)
-            if event.axis == 3:
-                print("R Vertical", event.value)
+            # Sticks
+            if event.type == pygame.JOYAXISMOTION:
+                if event.axis == 0:
+                    print("L Horizontal", event.value)
+                if event.axis == 1:
+                    print("L Vertical", event.value)
+                if event.axis == 2:
+                    print("R Horizontal", event.value)
+                if event.axis == 3:
+                    print("R Vertical", event.value)
 
-        # Buttons
-        if event.type == pygame.JOYBUTTONDOWN:
-            if event.button == 0:
-                print("Y Down")
-                button_press(controller_state, "y")
-            if event.button == 1:
-                print("B Down")
-                button_press(controller_state, "b")
-            if event.button == 2:
-                print("A Down")
-                button_press(controller_state, "a")
-            if event.button == 3:
-                print("X Down")
-                button_press(controller_state, "x")
-            if event.button == 4:
-                print("LB Down")
-                button_press(controller_state, "l")
-            if event.button == 5:
-                print("RB Down")
-                button_press(controller_state, "r")
-            if event.button == 6:
-                print("LT Down")
-                button_press(controller_state, "zl")
-            if event.button == 7:
-                print("RT Down")
-                button_press(controller_state, "zr")
-            if event.button == 8:
-                print("- Down")
-                button_press(controller_state, "minus")
-            if event.button == 9:
-                print("+ Down")
-                button_press(controller_state, "plus")
-            if event.button == 10:
-                print("L Stick Down")
-                button_press(controller_state, "l_stick")
-            if event.button == 11:
-                print("R Stick Down")
-                button_press(controller_state, "r_stick")
-            if event.button == 12:
-                print("Home Down")
-                button_press(controller_state, "home")
-            if event.button == 13:
-                print("Capture Down")
-                button_press(controller_state, "capture")
-            
-        if event.type == pygame.JOYBUTTONUP:
-            if event.button == 0:
-                print("Y Down")
-                button_release(controller_state, "y")
-            if event.button == 1:
-                print("B Down")
-                button_release(controller_state, "b")
-            if event.button == 2:
-                print("A Down")
-                button_release(controller_state, "a")
-            if event.button == 3:
-                print("X Down")
-                button_release(controller_state, "x")
-            if event.button == 4:
-                print("LB Down")
-                button_release(controller_state, "l")
-            if event.button == 5:
-                print("RB Down")
-                button_release(controller_state, "r")
-            if event.button == 6:
-                print("LT Down")
-                button_release(controller_state, "zl")
-            if event.button == 7:
-                print("RT Down")
-                button_release(controller_state, "zr")
-            if event.button == 8:
-                print("- Down")
-                button_release(controller_state, "minus")
-            if event.button == 9:
-                print("+ Down")
-                button_release(controller_state, "plus")
-            if event.button == 10:
-                print("L Stick Down")
-                button_release(controller_state, "l_stick")
-            if event.button == 11:
-                print("R Stick Down")
-                button_release(controller_state, "r_stick")
-            if event.button == 12:
-                print("Home Down")
-                button_release(controller_state, "home")
-            if event.button == 13:
-                print("Capture Down")
-                button_release(controller_state, "capture")
+            # Buttons
+            if event.type == pygame.JOYBUTTONDOWN:
+                if event.button == 0:
+                    print("Y Down")
+                    button_press(controller_state, "y")
+                if event.button == 1:
+                    print("B Down")
+                    button_press(controller_state, "b")
+                if event.button == 2:
+                    print("A Down")
+                    button_press(controller_state, "a")
+                if event.button == 3:
+                    print("X Down")
+                    button_press(controller_state, "x")
+                if event.button == 4:
+                    print("LB Down")
+                    button_press(controller_state, "l")
+                if event.button == 5:
+                    print("RB Down")
+                    button_press(controller_state, "r")
+                if event.button == 6:
+                    print("LT Down")
+                    button_press(controller_state, "zl")
+                if event.button == 7:
+                    print("RT Down")
+                    button_press(controller_state, "zr")
+                if event.button == 8:
+                    print("- Down")
+                    button_press(controller_state, "minus")
+                if event.button == 9:
+                    print("+ Down")
+                    button_press(controller_state, "plus")
+                if event.button == 10:
+                    print("L Stick Down")
+                    button_press(controller_state, "l_stick")
+                if event.button == 11:
+                    print("R Stick Down")
+                    button_press(controller_state, "r_stick")
+                if event.button == 12:
+                    print("Home Down")
+                    button_press(controller_state, "home")
+                if event.button == 13:
+                    print("Capture Down")
+                    button_press(controller_state, "capture")
+                
+            if event.type == pygame.JOYBUTTONUP:
+                if event.button == 0:
+                    print("Y Down")
+                    button_release(controller_state, "y")
+                if event.button == 1:
+                    print("B Down")
+                    button_release(controller_state, "b")
+                if event.button == 2:
+                    print("A Down")
+                    button_release(controller_state, "a")
+                if event.button == 3:
+                    print("X Down")
+                    button_release(controller_state, "x")
+                if event.button == 4:
+                    print("LB Down")
+                    button_release(controller_state, "l")
+                if event.button == 5:
+                    print("RB Down")
+                    button_release(controller_state, "r")
+                if event.button == 6:
+                    print("LT Down")
+                    button_release(controller_state, "zl")
+                if event.button == 7:
+                    print("RT Down")
+                    button_release(controller_state, "zr")
+                if event.button == 8:
+                    print("- Down")
+                    button_release(controller_state, "minus")
+                if event.button == 9:
+                    print("+ Down")
+                    button_release(controller_state, "plus")
+                if event.button == 10:
+                    print("L Stick Down")
+                    button_release(controller_state, "l_stick")
+                if event.button == 11:
+                    print("R Stick Down")
+                    button_release(controller_state, "r_stick")
+                if event.button == 12:
+                    print("Home Down")
+                    button_release(controller_state, "home")
+                if event.button == 13:
+                    print("Capture Down")
+                    button_release(controller_state, "capture")
 
 def _register_commands_with_controller_state(controller_state, cli):
     """

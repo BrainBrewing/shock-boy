@@ -80,20 +80,21 @@ async def gamepad_proxy(controller_state: ControllerState, cli: ControllerCLI):
             if event.type == pygame.JOYAXISMOTION:
                 if event.axis == 0:
                     print("L Horizontal", event.value)
-                    cli.cmd_stick("l", "h", rescale(event.value))
+                    await cli.cmd_stick("l", "h", rescale(event.value))
                     # controller_state.l_stick_state.set_h(rescale(event.value))
                 if event.axis == 1:
                     print("L Vertical", event.value)
-                    cli.cmd_stick("l", "v", rescale(event.value*-1))
+                    await cli.cmd_stick("l", "v", rescale(event.value*-1))
                     # controller_state.l_stick_state.set_v(rescale(event.value*-1))
                 if event.axis == 2:
                     print("R Horizontal", event.value)
-                    cli.cmd_stick("r", "h", rescale(event.value))
+                    await cli.cmd_stick("r", "h", rescale(event.value))
                     # controller_state.r_stick_state.set_h(rescale(event.value))
                 if event.axis == 3:
                     print("R Vertical", event.value)
-                    cli.cmd_stick("r", "v", rescale(event.value*-1))
+                    await cli.cmd_stick("r", "v", rescale(event.value*-1))
                     # controller_state.r_stick_state.set_v(rescale(event.value*-1))
+                await controller_state.send()
 
             # Buttons
             if event.type == pygame.JOYBUTTONDOWN:

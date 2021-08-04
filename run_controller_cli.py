@@ -16,8 +16,11 @@ from joycontrol.memory import FlashMemory
 from joycontrol.protocol import controller_protocol_factory
 from joycontrol.server import create_hid_server
 from joycontrol.nfc_tag import NFCTag
+from joycontrol.transport import NotConnectedError
+
 
 import pygame
+from mappings import buttons, stick_sides, stick_directions
 
 logger = logging.getLogger(__name__)
 
@@ -60,146 +63,32 @@ Options:
 def rescale(val):
     return (int)((val+1) * 2047)
 
-async def gamepad_proxy(controller_state: ControllerState, cli: ControllerCLI):
-    pygame.init()
-    clock = pygame.time.Clock()
+async def run(cli: ControllerCLI):
+    while True:
+        asyncio.sleep(0.01)
 
-    joysticks = []
-    for i in range(0, pygame.joystick.get_count()):
-        joysticks.append(pygame.joystick.Joystick(i))
-        joysticks[-1].init()
-        print ("Initialized joystick")
-
-    gamepad_loop = True
-    while gamepad_loop:
-        # clock.tick(60)
+        buttons_to_push = []
 
         for event in pygame.event.get():
 
-            # Sticks
             if event.type == pygame.JOYAXISMOTION:
-                if event.axis == 0:
-                    print("L Horizontal", event.value)
-                    await cli.cmd_stick("l", "h", rescale(event.value))
-                    # controller_state.l_stick_state.set_h(rescale(event.value))
-                if event.axis == 1:
-                    print("L Vertical", event.value)
-                    await cli.cmd_stick("l", "v", rescale(event.value*-1))
-                    # controller_state.l_stick_state.set_v(rescale(event.value*-1))
-                if event.axis == 2:
-                    print("R Horizontal", event.value)
-                    await cli.cmd_stick("r", "h", rescale(event.value))
-                    # controller_state.r_stick_state.set_h(rescale(event.value))
-                if event.axis == 3:
-                    print("R Vertical", event.value)
-                    await cli.cmd_stick("r", "v", rescale(event.value*-1))
-                    # controller_state.r_stick_state.set_v(rescale(event.value*-1))
-                await controller_state.send()
+                side = stick_sides[event.axis]
+                direction = stick_directions[event.axis]
+                await cli._set_stick(side, direction, rescale(event.value))
 
-            # Buttons
             if event.type == pygame.JOYBUTTONDOWN:
-                if event.button == 0:
-                    print("Y Down")
-                    await button_press(controller_state, "y")
-                if event.button == 1:
-                    print("B Down")
-                    await button_press(controller_state, "b")
-                if event.button == 2:
-                    print("A Down")
-                    await button_press(controller_state, "a")
-                if event.button == 3:
-                    print("X Down")
-                    await button_press(controller_state, "x")
-                if event.button == 4:
-                    print("LB Down")
-                    await button_press(controller_state, "l")
-                if event.button == 5:
-                    print("RB Down")
-                    await button_press(controller_state, "r")
-                if event.button == 6:
-                    print("LT Down")
-                    await button_press(controller_state, "zl")
-                if event.button == 7:
-                    print("RT Down")
-                    await button_press(controller_state, "zr")
-                if event.button == 8:
-                    print("- Down")
-                    await button_press(controller_state, "minus")
-                if event.button == 9:
-                    print("+ Down")
-                    await button_press(controller_state, "plus")
-                if event.button == 10:
-                    print("L Stick Down")
-                    await button_press(controller_state, "l_stick")
-                if event.button == 11:
-                    print("R Stick Down")
-                    await button_press(controller_state, "r_stick")
-                if event.button == 12:
-                    print("Home Down")
-                    await button_press(controller_state, "home")
-                if event.button == 13:
-                    print("Capture Down")
-                    await button_press(controller_state, "capture")
-                
+                button = buttons[event.button]
+                await button_press(cli.controller_state, button)
+
             if event.type == pygame.JOYBUTTONUP:
-                if event.button == 0:
-                    print("Y Down")
-                    await button_release(controller_state, "y")
-                if event.button == 1:
-                    print("B Down")
-                    await button_release(controller_state, "b")
-                if event.button == 2:
-                    print("A Down")
-                    await button_release(controller_state, "a")
-                if event.button == 3:
-                    print("X Down")
-                    await button_release(controller_state, "x")
-                if event.button == 4:
-                    print("LB Down")
-                    await button_release(controller_state, "l")
-                if event.button == 5:
-                    print("RB Down")
-                    await button_release(controller_state, "r")
-                if event.button == 6:
-                    print("LT Down")
-                    await button_release(controller_state, "zl")
-                if event.button == 7:
-                    print("RT Down")
-                    await button_release(controller_state, "zr")
-                if event.button == 8:
-                    print("- Down")
-                    await button_release(controller_state, "minus")
-                if event.button == 9:
-                    print("+ Down")
-                    await button_release(controller_state, "plus")
-                if event.button == 10:
-                    print("L Stick Down")
-                    await button_release(controller_state, "l_stick")
-                if event.button == 11:
-                    print("R Stick Down")
-                    await button_release(controller_state, "r_stick")
-                if event.button == 12:
-                    print("Home Down")
-                    await button_release(controller_state, "home")
-                if event.button == 13:
-                    print("Capture Down")
-                    await button_release(controller_state, "capture")
+                button = buttons[event.button]
+                await button_release(cli.controller_state, button)
 
-def _register_commands_with_controller_state(controller_state, cli):
-    """
-    Commands registered here can use the given controller state.
-    The doc string of commands will be printed by the CLI when calling "help"
-    :param cli:
-    :param controller_state:
-    """
-    async def start_gamepad():
-        """
-        start_gamepad - Starts using gamepad as a proxy for switch controller
-        """
-        await gamepad_proxy(controller_state, cli)
-
-    cli.add_command(start_gamepad.__name__, start_gamepad)
-
+        try:
+            await cli.controller_state.send()
+        except NotConnectedError:
+            logger.info('Connection was lost.')
+            return
 
 async def _main(args):
     # Get controller name to emulate from arguments
@@ -228,7 +117,6 @@ async def _main(args):
 
         # Create command line interface and add some extra commands
         cli = ControllerCLI(controller_state)
-        _register_commands_with_controller_state(controller_state, cli)
         cli.add_command('amiibo', ControllerCLI.deprecated('Command was removed - use "nfc" instead!'))
         cli.add_command(debug.debug.__name__, debug.debug)
 
@@ -236,9 +124,17 @@ async def _main(args):
         if args.nfc is not None:
             await cli.commands['nfc'](args.nfc)
 
-        # run the cli
+        # access gamepad
+        pygame.init()
+        joysticks = []
+        for i in range(0, pygame.joystick.get_count()):
+            joysticks.append(pygame.joystick.Joystick(i))
+            joysticks[-1].init()
+            print ("Initialized gamepad")
+
+        # start main run loop
         try:
-            await cli.run()
+            await run(cli)
         finally:
             logger.info('Stopping communication...')
             await transport.close()

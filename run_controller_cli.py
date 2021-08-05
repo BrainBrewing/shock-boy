@@ -63,10 +63,9 @@ def rescale(val):
     return (int)((val+1) * 2047)
 
 async def run(cli: ControllerCLI):
-    while True:
-        asyncio.sleep(0.02)
 
-        buttons_to_push = []
+    while True:
+        #await asyncio.sleep(0.01)
 
         for event in pygame.event.get():
 
@@ -77,7 +76,22 @@ async def run(cli: ControllerCLI):
                 if direction == "v":
                     event.value *= -1
                 await cli.cmd_stick(side, direction, rescale(event.value))
+                #await asyncio.sleep(0.03)
                 #print("axis end")
+
+                try:
+            #print("send begin")
+            #await cli.controller_state.send()
+            #print("send end")
+                    #await asyncio.wait_for(cli.controller_state.send(), timeout=0.5)
+                    await cli.controller_state.send()
+                #except asyncio.TimeoutError:
+                    #logger.info("Controller send took too long.")
+                    #continue
+                except NotConnectedError:
+                    logger.info('Connection was lost.')
+                    return
+
 
             if event.type == pygame.JOYBUTTONDOWN:
                 #print("down begin")
@@ -91,14 +105,7 @@ async def run(cli: ControllerCLI):
                 await button_release(cli.controller_state, button)
                 #print("up end")
 
-        try:
-            #print("send begin")
-            await cli.controller_state.send()
-            #print("send end")
-        except NotConnectedError:
-            logger.info('Connection was lost.')
-            return
-
+        
 async def _main(args):
     # Get controller name to emulate from arguments
     controller = Controller.from_arg(args.controller)

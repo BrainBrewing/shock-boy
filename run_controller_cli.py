@@ -18,7 +18,6 @@ from joycontrol.server import create_hid_server
 from joycontrol.nfc_tag import NFCTag
 from joycontrol.transport import NotConnectedError
 
-
 import pygame
 from mappings import buttons, stick_sides, stick_directions
 
@@ -65,27 +64,37 @@ def rescale(val):
 
 async def run(cli: ControllerCLI):
     while True:
-        asyncio.sleep(0.01)
+        asyncio.sleep(0.02)
 
         buttons_to_push = []
 
         for event in pygame.event.get():
 
             if event.type == pygame.JOYAXISMOTION:
+                #print("axis begin")
                 side = stick_sides[event.axis]
                 direction = stick_directions[event.axis]
-                await cli._set_stick(side, direction, rescale(event.value))
+                if direction == "v":
+                    event.value *= -1
+                await cli.cmd_stick(side, direction, rescale(event.value))
+                #print("axis end")
 
             if event.type == pygame.JOYBUTTONDOWN:
+                #print("down begin")
                 button = buttons[event.button]
                 await button_press(cli.controller_state, button)
+                #print("down end")
 
             if event.type == pygame.JOYBUTTONUP:
+                #print("up begin")
                 button = buttons[event.button]
                 await button_release(cli.controller_state, button)
+                #print("up end")
 
         try:
+            #print("send begin")
             await cli.controller_state.send()
+            #print("send end")
         except NotConnectedError:
             logger.info('Connection was lost.')
             return

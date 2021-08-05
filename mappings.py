@@ -15,14 +15,14 @@ buttons = {
     13: "capture"
 }
 
-stick_side = {
+stick_sides = {
     0: "l",
     1: "l",
     2: "r",
     3: "r"
 }
 
-stick_direction = {
+stick_directions = {
     0: "h",
     1: "v",
     2: "h",

@@ -64,7 +64,10 @@ Options:
 def rescale(val):
     return (int)((val+1) * 2047)
 
-async def run(cli: ControllerCLI):
+async def shock(pavlok: Pavlok, shock_value):
+    pavlok.shock(shock_value)
+
+async def run(cli: ControllerCLI, pavlok: Pavlok, shock_value):
 
     while True:
         #await asyncio.sleep(0.01)
@@ -99,6 +102,8 @@ async def run(cli: ControllerCLI):
                 #print("down begin")
                 button = buttons[event.button]
                 await button_press(cli.controller_state, button)
+                if button == "zl" or button == "zr":
+                    await shock(pavlok, shock_value)
                 #print("down end")
 
             if event.type == pygame.JOYBUTTONUP:
@@ -152,11 +157,11 @@ async def _main(args):
 
         # connect to pavlok
         pavlok = Pavlok(mac=args.pavlok_mac)
-        pavlok.shock(args.shock_value)
+        #pavlok.shock(args.shock_value)
 
         # start main run loop
         try:
-            await run(cli)
+            await run(cli, pavlok, args.shock_value)
         finally:
             logger.info('Stopping communication...')
             await transport.close()

@@ -21,6 +21,8 @@ from joycontrol.transport import NotConnectedError
 import pygame
 from mappings import buttons, stick_sides, stick_directions
 
+from PyPav2.PyPav2 import Pavlok
+
 logger = logging.getLogger(__name__)
 
 """Emulates Switch controller. Opens joycontrol.command_line_interface to send button commands and more.
@@ -148,6 +150,10 @@ async def _main(args):
             joysticks[-1].init()
             print ("Initialized gamepad")
 
+        # connect to pavlok
+        pavlok = Pavlok(mac=args.pavlok_mac)
+        pavlok.shock(args.shock_value)
+
         # start main run loop
         try:
             await run(cli)
@@ -173,6 +179,8 @@ if __name__ == '__main__':
     parser.add_argument('-r', '--reconnect_bt_addr', type=str, default=None,
                         help='The Switch console Bluetooth address (or "auto" for automatic detection), for reconnecting as an already paired controller.')
     parser.add_argument('--nfc', type=str, default=None, help="amiibo dump placed on the controller. Äquivalent to the nfc command.")
+    parser.add_argument('--pavlok_mac', type=str)
+    parser.add_argument('--shock_value', type=int, default=4)
     args = parser.parse_args()
 
     loop = asyncio.get_event_loop()

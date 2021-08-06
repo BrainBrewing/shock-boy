@@ -1,0 +1,3 @@
+[submodule "PyPav2"]
+	path = PyPav2
+	url = https://github.com/ztrayl3/PyPav2.git
